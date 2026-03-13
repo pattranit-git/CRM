@@ -5,153 +5,316 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRM System</title>
   <style>
-    /* ── Reset & Base ── */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
-      color: #333;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
 
     /* ── Header ── */
     header {
-      background: #1a73e8;
-      color: white;
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      background: #1a73e8; color: white;
+      padding: 16px 32px; display: flex; align-items: center; gap: 12px;
     }
     header h1 { font-size: 1.4rem; }
 
     /* ── Tabs ── */
     .tabs {
-      display: flex;
-      gap: 8px;
-      padding: 16px 32px 0;
-      border-bottom: 2px solid #ddd;
-      background: white;
+      display: flex; gap: 8px; padding: 16px 32px 0;
+      border-bottom: 2px solid #ddd; background: white;
     }
     .tab-btn {
-      padding: 10px 24px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 0.95rem;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      color: #666;
-      transition: all 0.2s;
+      padding: 10px 24px; border: none; background: none; cursor: pointer;
+      font-size: 0.95rem; border-bottom: 3px solid transparent;
+      margin-bottom: -2px; color: #666; transition: all 0.2s;
     }
-    .tab-btn.active {
-      color: #1a73e8;
-      border-bottom-color: #1a73e8;
-      font-weight: 600;
-    }
+    .tab-btn.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 600; }
 
-    /* ── Main Content ── */
-    main { padding: 24px 32px; max-width: 1100px; margin: 0 auto; }
-
+    /* ── Main ── */
+    main { padding: 24px 32px; max-width: 1200px; margin: 0 auto; }
     .section { display: none; }
     .section.active { display: block; }
 
-    /* ── Card ── */
+    /* ── Cards ── */
     .card {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      background: white; border-radius: 10px; padding: 20px;
+      margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-
-    /* ── Form ── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    input, select {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #1a73e8;
-    }
-
-    /* ── Buttons ── */
-    .btn {
-      padding: 9px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .btn:hover { opacity: 0.85; }
-    .btn-primary { background: #1a73e8; color: white; }
-    .btn-danger  { background: #e53935; color: white; padding: 5px 12px; font-size: 0.8rem; }
-    .btn-edit    { background: #f57c00; color: white; padding: 5px 12px; font-size: 0.8rem; }
-
-    /* ── Table ── */
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid #f0f0f0; }
-    th { background: #f8f9fa; font-weight: 600; font-size: 0.85rem; color: #555; }
-    tr:hover td { background: #fafbff; }
-
-    /* ── Stage Badge ── */
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .badge-lead       { background: #e3f2fd; color: #1565c0; }
-    .badge-qualified  { background: #e8f5e9; color: #2e7d32; }
-    .badge-proposal   { background: #fff8e1; color: #f57f17; }
-    .badge-won        { background: #e8f5e9; color: #1b5e20; }
-    .badge-lost       { background: #fce4ec; color: #b71c1c; }
 
     /* ── Stats ── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+    .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .stat-card {
-      background: white;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      text-align: center;
+      background: white; border-radius: 10px; padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center;
     }
     .stat-card .number { font-size: 2rem; font-weight: 700; color: #1a73e8; }
     .stat-card .label  { font-size: 0.85rem; color: #777; margin-top: 4px; }
 
-    /* ── Toast notification ── */
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .toolbar input[type="text"] {
+      flex: 1; min-width: 200px; padding: 9px 14px;
+      border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;
+    }
+    .toolbar select {
+      padding: 9px 14px; border: 1px solid #ddd;
+      border-radius: 6px; font-size: 0.9rem; background: white;
+    }
+    .toolbar input:focus, .toolbar select:focus { outline: none; border-color: #1a73e8; }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 9px 20px; border: none; border-radius: 6px;
+      cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: #1a73e8; color: white; }
+    .btn-danger   { background: #e53935; color: white; padding: 5px 12px; font-size: 0.8rem; }
+    .btn-edit     { background: #f57c00; color: white; padding: 5px 12px; font-size: 0.8rem; }
+    .btn-ghost    { background: #f0f2f5; color: #333; }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+    th { background: #f8f9fa; font-weight: 600; font-size: 0.82rem; color: #555; text-transform: uppercase; letter-spacing: 0.04em; }
+    tr:hover td { background: #fafbff; }
+    .empty-row td { text-align: center; color: #aaa; padding: 40px; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 12px;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .badge-lead       { background: #e3f2fd; color: #1565c0; }
+    .badge-prospect   { background: #fff8e1; color: #f57f17; }
+    .badge-customer   { background: #e8f5e9; color: #2e7d32; }
+    .badge-inactive   { background: #f5f5f5; color: #757575; }
+    .badge-new        { background: #e3f2fd; color: #1565c0; }
+    .badge-contacted  { background: #fff8e1; color: #f57f17; }
+    .badge-proposal   { background: #fce4ec; color: #c62828; }
+    .badge-negotiation{ background: #f3e5f5; color: #6a1b9a; }
+    .badge-won        { background: #e8f5e9; color: #1b5e20; }
+    .badge-lost       { background: #fce4ec; color: #b71c1c; }
+
+    /* ── Modal Overlay ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    /* ── Modal Box ── */
+    .modal {
+      background: white; border-radius: 12px; width: 560px; max-width: 95vw;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: slideIn 0.2s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to   { transform: translateY(0);     opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-header h3 { font-size: 1.1rem; }
+    .modal-close {
+      background: none; border: none; font-size: 1.4rem;
+      cursor: pointer; color: #999; line-height: 1; padding: 4px 8px; border-radius: 4px;
+    }
+    .modal-close:hover { background: #f0f2f5; color: #333; }
+
+    .modal-body { padding: 24px; }
+    .modal-footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding: 16px 24px; border-top: 1px solid #f0f0f0;
+    }
+
+    /* ── Form Fields ── */
+    .form-group { margin-bottom: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    label {
+      display: block; font-size: 0.85rem; font-weight: 600;
+      color: #555; margin-bottom: 6px;
+    }
+    label .required { color: #e53935; margin-left: 2px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 9px 12px; border: 1px solid #ddd;
+      border-radius: 6px; font-size: 0.9rem; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { outline: none; border-color: #1a73e8; }
+
+    .form-group input.error,
+    .form-group select.error,
+    .form-group textarea.error { border-color: #e53935; }
+
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    /* ── Field Error Message ── */
+    .field-error {
+      font-size: 0.78rem; color: #e53935;
+      margin-top: 4px; display: none;
+    }
+    .field-error.show { display: block; }
+
+    /* ── Loading Spinner (inline) ── */
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ── */
     #toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #323232;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      z-index: 9999;
+      position: fixed; bottom: 24px; right: 24px;
+      background: #323232; color: white; padding: 12px 20px;
+      border-radius: 8px; font-size: 0.9rem; opacity: 0;
+      transition: opacity 0.3s; pointer-events: none; z-index: 9999;
     }
     #toast.show { opacity: 1; }
+
+    /* ── Search Highlight ── */
+    mark {
+      background: #fff176;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    /* ── Tags display ── */
+    .tag {
+      display: inline-block; background: #e8eaf6; color: #3949ab;
+      border-radius: 4px; padding: 2px 7px; font-size: 0.75rem; margin: 1px;
+    }
+
+    /* ── Deals Summary Bar ── */
+    .deals-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .summary-card {
+      background: white; border-radius: 10px; padding: 16px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .summary-icon { font-size: 1.8rem; line-height: 1; }
+    .summary-card .s-value { font-size: 1.5rem; font-weight: 700; color: #1a73e8; }
+    .summary-card .s-label { font-size: 0.8rem; color: #888; margin-top: 1px; }
+
+    /* ── Kanban Board ── */
+    .kanban-toolbar {
+      display: flex; justify-content: flex-end; margin-bottom: 14px;
+    }
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      align-items: start;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    /* ── Kanban Column ── */
+    .kanban-col {
+      border-radius: 10px;
+      overflow: hidden;
+      min-width: 180px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .col-header {
+      padding: 12px 14px 10px;
+      font-weight: 700; font-size: 0.82rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .col-header .col-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 4px;
+    }
+    .col-header .col-count {
+      background: rgba(255,255,255,0.35);
+      border-radius: 10px; padding: 1px 8px;
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .col-header .col-value { font-size: 0.72rem; font-weight: 600; opacity: 0.85; }
+
+    /* Stage colors */
+    .col-new         .col-header { background: #1e88e5; color: white; }
+    .col-contacted   .col-header { background: #fb8c00; color: white; }
+    .col-proposal    .col-header { background: #8e24aa; color: white; }
+    .col-negotiation .col-header { background: #e53935; color: white; }
+    .col-won         .col-header { background: #2e7d32; color: white; }
+    .col-lost        .col-header { background: #546e7a; color: white; }
+
+    .col-body {
+      background: #f5f6f8;
+      padding: 8px;
+      min-height: 200px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .col-empty {
+      text-align: center; color: #bbb;
+      font-size: 0.8rem; padding: 24px 8px;
+    }
+
+    /* ── Deal Card ── */
+    .deal-card {
+      background: white; border-radius: 8px;
+      padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-left: 3px solid transparent;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .deal-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); transform: translateY(-1px); }
+    .col-new         .deal-card { border-left-color: #1e88e5; }
+    .col-contacted   .deal-card { border-left-color: #fb8c00; }
+    .col-proposal    .deal-card { border-left-color: #8e24aa; }
+    .col-negotiation .deal-card { border-left-color: #e53935; }
+    .col-won         .deal-card { border-left-color: #2e7d32; }
+    .col-lost        .deal-card { border-left-color: #546e7a; }
+
+    .deal-title   { font-weight: 600; font-size: 0.88rem; margin-bottom: 6px; line-height: 1.3; }
+    .deal-contact { font-size: 0.78rem; color: #666; margin-bottom: 4px; }
+    .deal-value   { font-size: 0.85rem; font-weight: 700; color: #1a73e8; margin-bottom: 4px; }
+    .deal-date    { font-size: 0.72rem; color: #aaa; }
+    .deal-actions {
+      display: flex; gap: 5px; margin-top: 8px;
+      padding-top: 8px; border-top: 1px solid #f0f0f0;
+    }
+    .deal-actions .btn {
+      flex: 1; padding: 4px 0; font-size: 0.75rem; text-align: center;
+    }
+
+    /* ── Stage Changer (inline on card) ── */
+    .stage-changer {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 8px;
+    }
+    .stage-label {
+      font-size: 0.7rem; color: #bbb; white-space: nowrap; flex-shrink: 0;
+    }
+    .stage-select {
+      flex: 1; font-size: 0.75rem; padding: 3px 6px;
+      border: 1px solid #e0e0e0; border-radius: 5px;
+      background: #fafafa; color: #555; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .stage-select:hover   { border-color: #1a73e8; }
+    .stage-select:focus   { outline: none; border-color: #1a73e8; }
+    .stage-select:disabled { opacity: 0.5; cursor: wait; }
   </style>
 </head>
 <body>
@@ -164,9 +327,9 @@
 
 <!-- Tabs -->
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
-  <button class="tab-btn" onclick="switchTab('contacts')">Contacts</button>
-  <button class="tab-btn" onclick="switchTab('deals')">Deals</button>
+  <button class="tab-btn active" onclick="switchTab('dashboard', this)">Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('contacts', this)">Contacts</button>
+  <button class="tab-btn" onclick="switchTab('deals', this)">Deals</button>
 </div>
 
 <main>
@@ -176,47 +339,57 @@
     <h2 style="margin-bottom:16px">Overview</h2>
     <div class="stats">
       <div class="stat-card">
-        <div class="number" id="stat-contacts">-</div>
+        <div class="number" id="stat-contacts">—</div>
         <div class="label">Total Contacts</div>
       </div>
       <div class="stat-card">
-        <div class="number" id="stat-deals">-</div>
+        <div class="number" id="stat-customers">—</div>
+        <div class="label">Customers</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="stat-deals">—</div>
         <div class="label">Total Deals</div>
       </div>
       <div class="stat-card">
-        <div class="number" id="stat-won">-</div>
-        <div class="label">Won Deals</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="stat-value">-</div>
-        <div class="label">Total Value (Won)</div>
+        <div class="number" id="stat-won-value">—</div>
+        <div class="label">Won Value</div>
       </div>
     </div>
   </section>
 
   <!-- ── Contacts ── -->
   <section id="contacts" class="section">
-    <div class="card">
-      <h3 style="margin-bottom:14px">Add Contact</h3>
-      <div class="form-grid">
-        <input id="c-name"    placeholder="Name *" />
-        <input id="c-email"   placeholder="Email" type="email" />
-        <input id="c-phone"   placeholder="Phone" />
-        <input id="c-company" placeholder="Company" />
-      </div>
-      <button class="btn btn-primary" onclick="saveContact()">+ Add Contact</button>
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="text" id="search-input" placeholder="🔍 ค้นหาชื่อ / อีเมล / บริษัท..." oninput="filterContacts()" />
+      <select id="status-filter" onchange="filterContacts()">
+        <option value="">ทุก Status</option>
+        <option value="lead">Lead</option>
+        <option value="prospect">Prospect</option>
+        <option value="customer">Customer</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="btn btn-primary" onclick="openAddModal()">+ Add Contact</button>
+      <button class="btn btn-ghost" onclick="exportCSV()" style="border:1px solid #ddd" title="Export เป็น CSV สำหรับ Excel">⬇ Export CSV</button>
     </div>
 
-    <div class="card">
-      <table id="contacts-table">
+    <!-- Table -->
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table>
         <thead>
           <tr>
-            <th>#</th><th>Name</th><th>Email</th>
-            <th>Phone</th><th>Company</th><th>Actions</th>
+            <th>#</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>บริษัท</th>
+            <th>อีเมล</th>
+            <th>เบอร์โทร</th>
+            <th>Status</th>
+            <th>Tags</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="contacts-body">
-          <tr><td colspan="6" style="text-align:center;color:#aaa">Loading...</td></tr>
+          <tr class="empty-row"><td colspan="8">Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -224,41 +397,185 @@
 
   <!-- ── Deals ── -->
   <section id="deals" class="section">
-    <div class="card">
-      <h3 style="margin-bottom:14px">Add Deal</h3>
-      <div class="form-grid">
-        <input  id="d-title"   placeholder="Deal Title *" />
-        <input  id="d-value"   placeholder="Value (฿)" type="number" />
-        <select id="d-stage">
-          <option value="lead">Lead</option>
-          <option value="qualified">Qualified</option>
-          <option value="proposal">Proposal</option>
-          <option value="won">Won</option>
-          <option value="lost">Lost</option>
-        </select>
-        <select id="d-contact">
-          <option value="">— No Contact —</option>
-        </select>
+
+    <!-- Summary Bar -->
+    <div class="deals-summary" id="deals-summary">
+      <div class="summary-card">
+        <div class="summary-icon">💰</div>
+        <div>
+          <div class="s-value" id="sum-total-value">—</div>
+          <div class="s-label">มูลค่าทั้งหมด (Active)</div>
+        </div>
       </div>
-      <button class="btn btn-primary" onclick="saveDeal()">+ Add Deal</button>
+      <div class="summary-card">
+        <div class="summary-icon">🏆</div>
+        <div>
+          <div class="s-value" id="sum-won-value">—</div>
+          <div class="s-label">Won Deals</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">📈</div>
+        <div>
+          <div class="s-value" id="sum-win-rate">—</div>
+          <div class="s-label">Win Rate</div>
+        </div>
+      </div>
     </div>
 
-    <div class="card">
-      <table id="deals-table">
-        <thead>
-          <tr>
-            <th>#</th><th>Title</th><th>Value</th>
-            <th>Stage</th><th>Contact</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="deals-body">
-          <tr><td colspan="6" style="text-align:center;color:#aaa">Loading...</td></tr>
-        </tbody>
-      </table>
+    <!-- Toolbar -->
+    <div class="kanban-toolbar">
+      <button class="btn btn-primary" onclick="openAddDealModal()">+ New Deal</button>
     </div>
+
+    <!-- Kanban Board -->
+    <div class="kanban-board" id="kanban-board">
+      <!-- render by JS -->
+    </div>
+
   </section>
 
 </main>
+
+<!-- ── Contact Modal ── -->
+<div class="modal-overlay" id="contact-modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add Contact</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-row">
+        <!-- ชื่อ-นามสกุล -->
+        <div class="form-group">
+          <label for="f-name">ชื่อ-นามสกุล <span class="required">*</span></label>
+          <input type="text" id="f-name" placeholder="สมชาย ใจดี" oninput="clearError('f-name')" />
+          <div class="field-error" id="err-name">กรุณากรอกชื่อ-นามสกุล</div>
+        </div>
+
+        <!-- บริษัท -->
+        <div class="form-group">
+          <label for="f-company">บริษัท</label>
+          <input type="text" id="f-company" placeholder="บริษัท ABC จำกัด" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!-- อีเมล -->
+        <div class="form-group">
+          <label for="f-email">อีเมล <span class="required">*</span></label>
+          <input type="email" id="f-email" placeholder="email@example.com" oninput="clearError('f-email')" />
+          <div class="field-error" id="err-email">กรุณากรอกอีเมลให้ถูกต้อง</div>
+        </div>
+
+        <!-- เบอร์โทร -->
+        <div class="form-group">
+          <label for="f-phone">เบอร์โทร</label>
+          <input type="text" id="f-phone" placeholder="081-234-5678" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!-- Status -->
+        <div class="form-group">
+          <label for="f-status">Status</label>
+          <select id="f-status">
+            <option value="lead">Lead</option>
+            <option value="prospect">Prospect</option>
+            <option value="customer">Customer</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group">
+          <label for="f-tags">Tags <span style="font-weight:400;color:#aaa">(คั่นด้วยเครื่องหมาย ,)</span></label>
+          <input type="text" id="f-tags" placeholder="vip, enterprise, tech" />
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="f-notes">Notes</label>
+        <textarea id="f-notes" placeholder="หมายเหตุเพิ่มเติม..."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="submit-btn" onclick="saveContact()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Deal Modal ── -->
+<div class="modal-overlay" id="deal-modal" onclick="handleDealOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="deal-modal-title">New Deal</h3>
+      <button class="modal-close" onclick="closeDealModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- ชื่อดีล -->
+      <div class="form-group">
+        <label for="d-title">ชื่อดีล <span class="required">*</span></label>
+        <input type="text" id="d-title" placeholder="Enterprise License 2025" oninput="clearDealError('d-title')" />
+        <div class="field-error" id="derr-title">กรุณากรอกชื่อดีล</div>
+      </div>
+
+      <div class="form-row">
+        <!-- มูลค่า -->
+        <div class="form-group">
+          <label for="d-value">มูลค่า (฿)</label>
+          <input type="number" id="d-value" placeholder="0" min="0" />
+        </div>
+
+        <!-- Stage -->
+        <div class="form-group">
+          <label for="d-stage">Stage</label>
+          <select id="d-stage">
+            <option value="new">New</option>
+            <option value="contacted">Contacted</option>
+            <option value="proposal">Proposal</option>
+            <option value="negotiation">Negotiation</option>
+            <option value="won">Won</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!-- Contact -->
+        <div class="form-group">
+          <label for="d-contact">Contact <span class="required">*</span></label>
+          <select id="d-contact" onchange="clearDealError('d-contact')">
+            <option value="">— เลือก Contact —</option>
+          </select>
+          <div class="field-error" id="derr-contact">กรุณาเลือก Contact</div>
+        </div>
+
+        <!-- วันปิดดีล -->
+        <div class="form-group">
+          <label for="d-close-date">วันปิดดีล (คาดการณ์)</label>
+          <input type="date" id="d-close-date" />
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label for="d-notes">Notes</label>
+        <textarea id="d-notes" placeholder="รายละเอียดเพิ่มเติม..."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeDealModal()">Cancel</button>
+      <button class="btn btn-primary" id="deal-submit-btn" onclick="saveDeal()">Save</button>
+    </div>
+  </div>
+</div>
 
 <!-- Toast -->
 <div id="toast"></div>

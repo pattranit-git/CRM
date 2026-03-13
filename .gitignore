@@ -1,15 +1,15 @@
-# ไม่ push ไฟล์เหล่านี้ขึ้น Git
-
-# Environment variables (ข้อมูลสำคัญ เช่น password, database URL)
-.env
-
-# Node modules (ติดตั้งใหม่ได้ด้วย npm install)
+# Dependencies
 node_modules/
 
-# Log files
+# Environment variables — ห้าม push ขึ้น Git เด็ดขาด
+.env
+.env.local
+.env.production
+
+# Logs
 *.log
 npm-debug.log*
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db

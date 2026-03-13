@@ -41,6 +41,82 @@ router.get('/', async (req, res) => {
   }
 });
 
+// ── GET /api/contacts/export ─────────────────────────────────
+// ดึง contacts ทั้งหมดพร้อม deals แล้วส่งเป็น CSV
+// ต้องวางก่อน /:id เพื่อไม่ให้ "export" ถูก match เป็น param
+router.get('/export', async (req, res) => {
+  try {
+    // ดึง contacts พร้อม deal count และ deal value รวม
+    const result = await pool.query(`
+      SELECT
+        c.id,
+        c.name,
+        c.company,
+        c.email,
+        c.phone,
+        c.status,
+        c.tags,
+        c.notes,
+        c.created_at,
+        COUNT(d.id)::INTEGER          AS deal_count,
+        COALESCE(SUM(d.value), 0)     AS deal_total_value,
+        STRING_AGG(d.title, ' | ')    AS deal_titles
+      FROM contacts c
+      LEFT JOIN deals d ON d.contact_id = c.id
+      GROUP BY c.id
+      ORDER BY c.created_at DESC
+    `);
+
+    // ── สร้าง CSV ────────────────────────────────────────────
+    const headers = [
+      'ID', 'ชื่อ-นามสกุล', 'บริษัท', 'อีเมล', 'เบอร์โทร',
+      'Status', 'Tags', 'Notes', 'วันที่สร้าง',
+      'จำนวน Deals', 'มูลค่า Deals รวม', 'รายชื่อ Deals',
+    ];
+
+    // escape field: ครอบด้วย "" และ escape " → ""
+    const escapeCSV = (val) => {
+      if (val === null || val === undefined) return '';
+      const str = String(val);
+      // ถ้ามี comma, newline, หรือ " ให้ครอบด้วย quotes
+      if (str.includes(',') || str.includes('\n') || str.includes('"')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const rows = result.rows.map(c => [
+      c.id,
+      c.name,
+      c.company,
+      c.email,
+      c.phone,
+      c.status,
+      c.tags,
+      c.notes,
+      c.created_at ? new Date(c.created_at).toLocaleDateString('th-TH') : '',
+      c.deal_count,
+      c.deal_total_value,
+      c.deal_titles,
+    ].map(escapeCSV).join(','));
+
+    // รวม header + rows
+    const csv = [headers.join(','), ...rows].join('\r\n');
+
+    // ── ตั้งชื่อไฟล์ contacts-YYYY-MM-DD.csv ─────────────────
+    const today    = new Date().toISOString().split('T')[0]; // "2025-04-01"
+    const filename = `contacts-${today}.csv`;
+
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+    // BOM \uFEFF ต้นไฟล์ → ทำให้ Excel อ่านภาษาไทยได้ถูกต้อง
+    res.send('\uFEFF' + csv);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── GET /api/contacts/stats ──────────────────────────────────
 // สรุปจำนวน contacts แต่ละ status
 // ต้องวางก่อน /:id เพราะ Express จะ match "stats" เป็น :id ถ้าวางทีหลัง
