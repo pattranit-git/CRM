@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRM System</title>
+  <style>
+    /* ── Reset & Base ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #333;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a73e8;
+      color: white;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.4rem; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px 32px 0;
+      border-bottom: 2px solid #ddd;
+      background: white;
+    }
+    .tab-btn {
+      padding: 10px 24px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      color: #666;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: #1a73e8;
+      border-bottom-color: #1a73e8;
+      font-weight: 600;
+    }
+
+    /* ── Main Content ── */
+    main { padding: 24px 32px; max-width: 1100px; margin: 0 auto; }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Card ── */
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    /* ── Form ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    input, select {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #1a73e8;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 9px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #1a73e8; color: white; }
+    .btn-danger  { background: #e53935; color: white; padding: 5px 12px; font-size: 0.8rem; }
+    .btn-edit    { background: #f57c00; color: white; padding: 5px 12px; font-size: 0.8rem; }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+    th { background: #f8f9fa; font-weight: 600; font-size: 0.85rem; color: #555; }
+    tr:hover td { background: #fafbff; }
+
+    /* ── Stage Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-lead       { background: #e3f2fd; color: #1565c0; }
+    .badge-qualified  { background: #e8f5e9; color: #2e7d32; }
+    .badge-proposal   { background: #fff8e1; color: #f57f17; }
+    .badge-won        { background: #e8f5e9; color: #1b5e20; }
+    .badge-lost       { background: #fce4ec; color: #b71c1c; }
+
+    /* ── Stats ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .stat-card .number { font-size: 2rem; font-weight: 700; color: #1a73e8; }
+    .stat-card .label  { font-size: 0.85rem; color: #777; margin-top: 4px; }
+
+    /* ── Toast notification ── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #323232;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    #toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <span style="font-size:1.6rem">📊</span>
+  <h1>CRM System</h1>
+</header>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('contacts')">Contacts</button>
+  <button class="tab-btn" onclick="switchTab('deals')">Deals</button>
+</div>
+
+<main>
+
+  <!-- ── Dashboard ── -->
+  <section id="dashboard" class="section active">
+    <h2 style="margin-bottom:16px">Overview</h2>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="number" id="stat-contacts">-</div>
+        <div class="label">Total Contacts</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="stat-deals">-</div>
+        <div class="label">Total Deals</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="stat-won">-</div>
+        <div class="label">Won Deals</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" id="stat-value">-</div>
+        <div class="label">Total Value (Won)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contacts ── -->
+  <section id="contacts" class="section">
+    <div class="card">
+      <h3 style="margin-bottom:14px">Add Contact</h3>
+      <div class="form-grid">
+        <input id="c-name"    placeholder="Name *" />
+        <input id="c-email"   placeholder="Email" type="email" />
+        <input id="c-phone"   placeholder="Phone" />
+        <input id="c-company" placeholder="Company" />
+      </div>
+      <button class="btn btn-primary" onclick="saveContact()">+ Add Contact</button>
+    </div>
+
+    <div class="card">
+      <table id="contacts-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Name</th><th>Email</th>
+            <th>Phone</th><th>Company</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="contacts-body">
+          <tr><td colspan="6" style="text-align:center;color:#aaa">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Deals ── -->
+  <section id="deals" class="section">
+    <div class="card">
+      <h3 style="margin-bottom:14px">Add Deal</h3>
+      <div class="form-grid">
+        <input  id="d-title"   placeholder="Deal Title *" />
+        <input  id="d-value"   placeholder="Value (฿)" type="number" />
+        <select id="d-stage">
+          <option value="lead">Lead</option>
+          <option value="qualified">Qualified</option>
+          <option value="proposal">Proposal</option>
+          <option value="won">Won</option>
+          <option value="lost">Lost</option>
+        </select>
+        <select id="d-contact">
+          <option value="">— No Contact —</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="saveDeal()">+ Add Deal</button>
+    </div>
+
+    <div class="card">
+      <table id="deals-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Title</th><th>Value</th>
+            <th>Stage</th><th>Contact</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="deals-body">
+          <tr><td colspan="6" style="text-align:center;color:#aaa">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
